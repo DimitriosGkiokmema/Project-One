@@ -3,7 +3,11 @@ World and player data is stored within a single instance of the World class and 
 World map is read from "map.txt", and stored as a nested list of integers/strings in World.map (the format of this must be exactly as the starter code describes)
 All location and item data is read from external files "locations.txt" and "items.txt", and stored as instances of the Location and Item classes (the file structures and data structures used to store this info is up to you)
 
-Minimum required items: T-card, Cheat Sheet, Lucky Pen
+Minimum required items: 
+T-card (cafetiria)
+Cheat Sheet (inspect a table at the study room, found among other papers)
+Lucky Pen (grass outside Robarts)
+Backpack (Innis)
 
 Commands (these must be the exact strings used for the commands - not case-sensitive):
 Go [direction] - north, south, east, west
@@ -18,7 +22,11 @@ Players are able to move in appropriate directions, based on map.
   Inventory command displays all items currently in inventory.
   Make sure only items in inventory can be used or dropped, and only items in the current location can be picked up.
 
-Enchancements
+Enchancements:
+- more actions for the player
+- new level: the cafeteria in one of the upper floors
+- new level: Innis College
+- new item: backpack
 
 Puzzle - find hidden code to ulock door to last item
 
@@ -29,5 +37,5 @@ Quit
 Quit command allows player to quit game at any time.
 
 Player's total number of moves is limited
-Player can win the game
+Player can win the game by getting all items
 Player loses the game if the maximum number of moves is reached
