@@ -1,0 +1,23 @@
+To Do List:
+World and player data is stored within a single instance of the World class and Player class
+World map is read from "map.txt", and stored as a nested list of integers/strings in World.map (the format of this must be exactly as the starter code describes)
+All location and item data is read from external files "locations.txt" and "items.txt", and stored as instances of the Location and Item classes (the file structures and data structures used to store this info is up to you)
+Minimum required items: T-card, Cheat Sheet, Lucky Pen
+Commands (these must be the exact strings used for the commands - not case-sensitive):
+Go [direction] - north, south, east, west
+Players are able to move in appropriate directions, based on map.
+Look
+Each location has a description.
+Full description is given when "look" command used, or when first visiting a location.
+Else, brief description is given.
+Inventory
+Players can pick up and drop items.
+Inventory command displays all items currently in inventory.
+Make sure only items in inventory can be used or dropped, and only items in the current location can be picked up.
+Score
+Players must have a score which can be seen using "score" command.
+Quit
+Quit command allows player to quit game at any time.
+Player's total number of moves is limited
+Player can win the game
+Player loses the game if the maximum number of moves is reached
