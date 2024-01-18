@@ -25,13 +25,25 @@ class Location:
     """A location in our text adventure game world.
 
     Instance Attributes:
-        - # TODO
+        - position: A tuple representing the (x, y) position on the map
+        - brief_description: A brief description of the location
+        - long_description: A longer description shown only the first time the location is visited
+        - available_directions: A list of available directions to move from this location
+        - items: A list of items available in the location
+        - visited: A boolean indicating whether the location has been visited before
 
     Representation Invariants:
-        - # TODO
+         - 0 <= self.position[0] <= 9 and 0 <= self.position[1] <= 9
     """
+    position: tuple[int, int]
+    brief_description: str
+    long_description: str
+    available_directions: list[str]
+    items: list['Item']
+    visited: bool
 
-    def __init__(self) -> None:
+    def __init__(self, position: tuple[int, int], brief_description: str, long_description: str,
+                 available_directions: list[str], items: list['Item'] = None) -> None:
         """Initialize a new location.
 
         # TODO Add more details here about the initialization if needed
@@ -53,9 +65,14 @@ class Location:
         # The only thing you must NOT change is the name of this class: Location.
         # All locations in your game MUST be represented as an instance of this class.
 
-        # TODO: Complete this method
+        self.position = position
+        self.brief_description = brief_description
+        self.long_description = long_description
+        self.available_directions = available_directions
+        self.items = [] if items is None else items
+        self.visited = False
 
-    def available_actions(self):
+    def available_actions(self) -> list[str]:
         """
         Return the available actions in this location.
         The actions should depend on the items available in the location
@@ -66,18 +83,42 @@ class Location:
         # i.e. You may remove/modify/rename this as you like, and complete the
         # function header (e.g. add in parameters, complete the type contract) as needed
 
-        # TODO: Complete this method, if you'd like or remove/replace it if you're not using it
+        actions = []
+
+        # Check if the location has items
+        if self.items:
+            actions.append("Pick up items")
+
+        # Check if the player has the required items for the exam
+        required_items = {'T-card', 'Cheat Sheet', 'Lucky Pen'}
+        player_items = {item.name for item in self.items}
+
+        if all(item in player_items for item in required_items):
+            actions.append("Take the exam")
+
+        return actions
 
 
 class Item:
     """An item in our text adventure game world.
 
     Instance Attributes:
-        - # TODO
+        - name: a string representing the name of the item
+        - start_position: an integer representing the initial location of the item
+        - target_position: an integer representing the target location where the item should be deposited for credit
+        - target_points: an integer representing the points received for depositing the item in the target location
+
 
     Representation Invariants:
-        - # TODO
+        - isinstance(self.name, str) and self.name != ""
+        - self.start_position >= 0
+        - self.target_position >= 0
+        - self.target_points >= 0
     """
+    name: str
+    start_position: int
+    target_position: int
+    target_points: int
 
     def __init__(self, name: str, start: int, target: int, target_points: int) -> None:
         """Initialize a new item.
@@ -96,6 +137,14 @@ class Item:
         self.start_position = start
         self.target_position = target
         self.target_points = target_points
+
+    def __str__(self) -> str:
+        """Return a string representation of the item.
+        """
+        return (
+            f"{self.name} - Start: {self.start_position}, "
+            f"Target: {self.target_position}, Points: {self.target_points}"
+        )
 
 
 class Player:
