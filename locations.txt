@@ -24,25 +24,29 @@ LOCATION 3
 0
 The escalators are devoid of people.
 You are at the bottom of the escalators. The escalator going up to the second floor is to the West, the entrance to Robarts 
-is to the East. Midterms is one of the busiest times for libraries, where is everyone?
+is to the East. Some of the lights are flickering, and suddently you get the eery sense that something is off. It is quiet.
+Too quiet. Midterms is one of the busiest times for libraries, where is everyone?
 END
 
 LOCATION 4
 0
-You are on the second floor of the Robarts Library. There is a cafeteria, a study hall to the FIND, escalators to the East.
+You are on the second floor of the Robarts Library. There is a cafeteria and escalators to the West.
 You are on the second floor of the Robarts Library. It is usually crowded, especially around midterms, but today it's quiet.
-There are only a few students in the study hall, and even less in the cafeteria. In the cafetiria, there is a Starbucks in
-the FIND, and a FIND to the FIND.
+There are only a few students in the study hall, and even less in the cafeteria. In the cafetiria, there is a Starbucks to
+the North, and a Burrito place to the East.
 END
 
 LOCATION 5
 0
-You are at the Starbucks on the second floor of the Robarts Library. The escalators are to the FIND, the FIND to the FIND.
-There are very few people waiting in line to order
+You are at the Starbucks on the second floor of the Robarts Library. The escalators are to the West, the Burrito place to the East.
+There are very few people waiting in line to order. Starbucks made changes to their menu, a new item has been added.
+END
 
+LOCATION 6
+0
+You are at the Burito place
 
-
-You are outside the Robarts library.
+You are outside the Robarts library. The entrance back into Robarts is to the West.
 You are outside the Robarts library on a crowded street. There is a smell of coffee in the air. Innis College is to the North.
 END
 
