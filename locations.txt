@@ -36,7 +36,7 @@ END
 
 LOCATION 5
 0
-You are outside Innis College.
+You are outside Innis College, Robarts is to the South.
 You are outside Innis College on a busy street. There are some students sitting on the benches and others playing frisbee.
 It is not winter yet, so flowers are still vibrant and the trees still have most of their leaves. There is a big tree West
 of the entrance which blocks the sunlight, a perfect spot for a nap!
