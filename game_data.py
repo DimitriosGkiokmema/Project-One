@@ -21,6 +21,54 @@ This file is Copyright (c) 2024 CSC111 Teaching Team
 from typing import Optional, TextIO
 
 
+class Item:
+    """An item in our text adventure game world.
+
+    Instance Attributes:
+        - name: a string representing the name of the item
+        - start_position: an integer representing the initial location of the item
+        - target_position: an integer representing the target location where the item should be deposited for credit
+        - target_points: an integer representing the points received for depositing the item in the target location
+
+
+    Representation Invariants:
+        - isinstance(self.name, str) and self.name != ""
+        - self.start_position >= 0
+        - self.target_position >= 0
+        - self.target_points >= 0
+    """
+    name: str
+    start_position: int
+    target_position: int
+    target_points: int
+
+    def __init__(self, name: str, start: int, target: int, target_points: int) -> None:
+        """Initialize a new item.
+        """
+
+        # NOTES:
+        # This is just a suggested starter class for Item.
+        # You may change these parameters and the data available for each Item object as you see fit.
+        # (The current parameters correspond to the example in the handout).
+        # Consider every method in this Item class as a "suggested method".
+        #
+        # The only thing you must NOT change is the name of this class: Item.
+        # All item objects in your game MUST be represented as an instance of this class.
+
+        self.name = name
+        self.start_position = start
+        self.target_position = target
+        self.target_points = target_points
+
+    def __str__(self) -> str:
+        """Return a string representation of the item.
+        """
+        return (
+            f"{self.name} - Start: {self.start_position}, "
+            f"Target: {self.target_position}, Points: {self.target_points}"
+        )
+    
+    
 class Location:
     """A location in our text adventure game world.
 
@@ -39,11 +87,11 @@ class Location:
     brief_description: str
     long_description: str
     available_directions: list[str]
-    items: list['Item']
+    items: list[Item]
     visited: bool
 
     def __init__(self, position: tuple[int, int], brief_description: str, long_description: str,
-                 available_directions: list[str], items: list['Item'] = None) -> None:
+                 available_directions: list[str], items: list[Item] = None) -> None:
         """Initialize a new location.
 
         # TODO Add more details here about the initialization if needed
@@ -97,54 +145,6 @@ class Location:
             actions.append("Take the exam")
 
         return actions
-
-
-class Item:
-    """An item in our text adventure game world.
-
-    Instance Attributes:
-        - name: a string representing the name of the item
-        - start_position: an integer representing the initial location of the item
-        - target_position: an integer representing the target location where the item should be deposited for credit
-        - target_points: an integer representing the points received for depositing the item in the target location
-
-
-    Representation Invariants:
-        - isinstance(self.name, str) and self.name != ""
-        - self.start_position >= 0
-        - self.target_position >= 0
-        - self.target_points >= 0
-    """
-    name: str
-    start_position: int
-    target_position: int
-    target_points: int
-
-    def __init__(self, name: str, start: int, target: int, target_points: int) -> None:
-        """Initialize a new item.
-        """
-
-        # NOTES:
-        # This is just a suggested starter class for Item.
-        # You may change these parameters and the data available for each Item object as you see fit.
-        # (The current parameters correspond to the example in the handout).
-        # Consider every method in this Item class as a "suggested method".
-        #
-        # The only thing you must NOT change is the name of this class: Item.
-        # All item objects in your game MUST be represented as an instance of this class.
-
-        self.name = name
-        self.start_position = start
-        self.target_position = target
-        self.target_points = target_points
-
-    def __str__(self) -> str:
-        """Return a string representation of the item.
-        """
-        return (
-            f"{self.name} - Start: {self.start_position}, "
-            f"Target: {self.target_position}, Points: {self.target_points}"
-        )
 
 
 class Player:
