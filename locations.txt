@@ -67,7 +67,7 @@ END
 
 LOCATION 9
 0
-You are uder a tree by the entrance of Innis College. The entrance to Innis is to the West.
+You are under a tree by the entrance of Innis College. The entrance to Innis is to the West.
 Because of your superior tree skills, you can quickly tell that the tree is an Oak Tree, which can live up to one thousand years!
 On the grass behind the tree you notice something red. What could it be? The entrance to Innis is the West.
 END
