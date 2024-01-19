@@ -25,7 +25,7 @@ LOCATION 3
 The escalators are devoid of people.
 You are at the bottom of the escalators. The escalator going up to the second floor is to the West, the entrance to Robarts 
 is to the East. Some of the lights are flickering, and suddently you get the eery sense that something is off. It is quiet.
-Too quiet. Midterms is one of the busiest times for libraries, where is everyone?
+Too quiet. Midterm season is one of the busiest times for libraries, where is everyone?
 END
 
 LOCATION 4
@@ -52,8 +52,9 @@ but no one is near it. Who would leave so much stuff on a table only to leave? T
 LOCATION 7
 0
 You are outside the Robarts library. The entrance back into Robarts is to the West.
-You are outside the Robarts library on a crowded street. There is a smell of coffee in the air. 
-Innis College is to the North and the entrance back into Robarts is to the West.
+You are outside the Robarts library on a crowded street. There is a smell of coffee in the air.
+Something shiny is nearby on the grass, its probably nothing important. Innis College is to the 
+North and the entrance back into Robarts is to the West.
 END
 
 LOCATION 8
@@ -67,4 +68,6 @@ END
 LOCATION 9
 0
 You are uder a tree by the entrance of Innis College. The entrace to Innis is to the East.
-Because of your superior tree skills, you can quickly tell that the tree is an Oak Tree, your 
+Because of your superior tree skills, you can quickly tell that the tree is an Oak Tree, which can live up to one thousand years!
+On the grass behind the tree you notice something red. What could it be? The entrance to Innis is the East.
+END
