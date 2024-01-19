@@ -32,7 +32,7 @@ class Item:
 
 
     Representation Invariants:
-        - isinstance(self.name, str) and self.name != ""
+        - self.name != ""
         - self.start_position >= 0
         - self.target_position >= 0
         - self.target_points >= 0
