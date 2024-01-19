@@ -30,24 +30,24 @@ END
 
 LOCATION 4
 0
-You are on the second floor of the Robarts Library. There is a Starbucks North, escalators West, and a study hall South.
+You are on the second floor of the Robarts Library. There is a Starbucks North, escalators East, and a study hall South.
 You are on the second floor of the Robarts Library. It is usually crowded, especially around midterms, but today it's quiet.
 There are only a few students in the study hall, and even less in the Starbucks. The Starbucks is to
-the North, escalators to the West, and a study hall to the South.
+the North, escalators to the East, and a study hall to the South.
 END
 
 LOCATION 5
 0
-You are at the Starbucks on the second floor of the Robarts Library. The escalators are to the West.
+You are at the Starbucks on the second floor of the Robarts Library. The escalators are to the South.
 There are very few people waiting in line to order. Starbucks made changes to their menu, a new item has been added.
-The baristas are trying their best to promote the new item to the costumers. The escalators are to the West.
+The baristas are trying their best to promote the new item to the costumers. The escalators are to the South.
 END
 
 LOCATION 6
 0
-You are at the study room on the second floor of the Robarts Library. The escalators are to the West.
+You are at the study room on the second floor of the Robarts Library. The escalators are to the North.
 There are a couple people studying, but even more sleeping. You see a table scattered with papers and open books,
-but no one is near it. Who would leave so much stuff on a table only to leave? The escalators are to the West.
+but no one is near it. Who would leave so much stuff on a table only to leave? The escalators are to the North.
 
 LOCATION 7
 0
@@ -59,7 +59,7 @@ END
 
 LOCATION 8
 0
-You are outside Innis College, Robarts is to the South.
+You are outside Innis College, Robarts is to the South and a tree to the East.
 You are outside Innis College on a busy street. There are some students sitting on the benches and others playing frisbee
 on the grass. It is not winter yet, so flowers are still vibrant and the trees still have most of their leaves. There is 
 a big tree West of the entrance which blocks the sunlight, a perfect spot for a nap! Robarts is to the South.
@@ -67,7 +67,7 @@ END
 
 LOCATION 9
 0
-You are uder a tree by the entrance of Innis College. The entrace to Innis is to the East.
+You are uder a tree by the entrance of Innis College. The entrace to Innis is to the West.
 Because of your superior tree skills, you can quickly tell that the tree is an Oak Tree, which can live up to one thousand years!
-On the grass behind the tree you notice something red. What could it be? The entrance to Innis is the East.
+On the grass behind the tree you notice something red. What could it be? The entrance to Innis is the West.
 END
