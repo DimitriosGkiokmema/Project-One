@@ -149,14 +149,23 @@ class Location:
 
 class Player:
     """
-    A Player in the text advanture game.
+    A Player in the text adventure game.
 
     Instance Attributes:
-        - # TODO
+        - x and y are the coordinates of the player in the map
+        - inventory keeps track of items picked up
+        - victory turns true when player has all items in inventory
 
     Representation Invariants:
-        - # TODO
+        - 0 <= x < width of map
+        - 0 <= y < length of map
+        - inventory holds only Items
+        - victory only true when game is won
     """
+    x: int
+    y: int
+    inventory: list[Item]
+    victory: bool
 
     def __init__(self, x: int, y: int) -> None:
         """
@@ -172,17 +181,34 @@ class Player:
         self.inventory = []
         self.victory = False
 
+    def update(self, direction: str) -> None:
+        map_width = 5
+        map_length = 5
+
+        if direction == 'East' and self.x < map_width - 1:
+            self.x += 1
+        if direction == 'West' and self.x > 0:
+            self.x -= 1
+        if direction == 'North' and self.x > 0:
+            self.y -= 1
+        if direction == 'South' and self.x < map_length - 1:
+            self.y += 1
+
 
 class World:
     """A text adventure game world storing all location, item and map data.
 
     Instance Attributes:
         - map: a nested list representation of this world's map
+        - locations: a list containing all the location objects
+        - items: holds all Item objects
 
     Representation Invariants:
         - map contains only location numbers and -1
     """
     map: list[list[int]]
+    locations: list[Location]
+    items: list[Item]
 
     def __init__(self, map_data: TextIO, location_data: TextIO, items_data: TextIO) -> None:
         """
@@ -203,6 +229,7 @@ class World:
 
         # The map MUST be stored in a nested list as described in the load_map() function's docstring below
         self.map = self.load_map(map_data)
+        self.load_locations(location_data)  # Creates locations list
 
         # NOTE: You may choose how to store location and item data; create your own World methods to handle these
         # accordingly. The only requirements:
@@ -235,29 +262,24 @@ class World:
 
         return map_list
 
-    # TODO: Add methods for loading location data and item data (see note above).
     def load_locations(self, places: TextIO) -> None:
         """
         Create all the Location objects and store them in a list
-
-        /position: tuple[int, int]
-        brief_description: str
-        /long_description: str
-        /available_directions: list[str]
-        /items: list[Item]
-        visited: bool
+        Additionally, create a list storing all item objects in the game
         """
-        locations = places.readlines()
+        location_file = places.readlines()
         long_description = []
         description = ''
 
         # Fill list with descriptions for the locations, except for LOCATION -1
-        for line in locations:
+        for line in location_file:
             if line == '\n':
                 long_description.append(description)
                 description = ''
             else:
                 description = description + line
+
+        short_descriptions = self.short_descriptions(long_description)
 
         # Find positions of locations on map
         positions = []
@@ -285,10 +307,9 @@ class World:
 
             directions.append(lst)
 
-        # Find location of items and create new Item objects
+        # Find location of items and create Item objects
         item_file = open('items.txt').readlines()
         item_file.sort()
-        items = []
 
         for i in range(len(item_file)):
             item_file[i] = item_file[i].split()
@@ -299,9 +320,41 @@ class World:
             points = int(item_file[item][2])
             name = item_file[item][3]
 
-            items.append(Item(name, start, target, points))
+            self.items.append(Item(name, start, target, points))
 
-        # STILL UNDER CONSTRUCTION
+        # Create Location objects for each location (except LOCATION -1)
+        for i in range(9):
+            new_item = None
+
+            for item in self.items:
+                if item.start_position == i:
+                    new_item = item
+
+            place = Location(positions[i], short_descriptions[i], long_description[i], directions[i], new_item)
+            self.locations.append(place
+
+        # Add location for LOCATION -1
+        self.locations.append(Location())
+
+    def short_descriptions(self, long: list[str]) -> list[str]:
+        """
+        Returns a list of shorts description for each location
+        The descriptions for the locations begin by describing nearby places and then describe your current location
+        This function simply creates a list of the location descriptions up to the nearby places. The description for the
+        current place is not included
+        """
+        short = []
+
+        for description in long:
+            max_index = 0
+
+            for d in ['East', 'West', 'South', 'North']:
+                if description.index(d) > max_index:
+                    max_index = description.index(d)
+
+            short.append(description[:max_index + 1] + '\nEND')
+
+        return short
 
     # NOTE: The method below is REQUIRED. Complete it exactly as specified.
     def get_location(self, x: int, y: int) -> Optional[Location]:
@@ -316,3 +369,5 @@ class World:
 
         if num == -1:
             return None
+        else:
+            return self.locations[num - 1]
