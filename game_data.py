@@ -178,11 +178,11 @@ class World:
 
     Instance Attributes:
         - map: a nested list representation of this world's map
-        - # TODO add more instance attributes as needed; do NOT remove the map attribute
 
     Representation Invariants:
-        - # TODO
+        - map contains only location numbers and -1
     """
+    map: list[list[int]]
 
     def __init__(self, map_data: TextIO, location_data: TextIO, items_data: TextIO) -> None:
         """
@@ -210,7 +210,7 @@ class World:
         # 2. Make sure the Item class is used to represent each item.
 
     # NOTE: The method below is REQUIRED. Complete it exactly as specified.
-        def load_map(self, map_data: TextIO) -> list[list[int]]:
+    def load_map(self, map_data: TextIO) -> list[list[int]]:
         """
         Store map from open file map_data as the map attribute of this object, as a nested list of integers like so:
 
@@ -236,12 +236,83 @@ class World:
         return map_list
 
     # TODO: Add methods for loading location data and item data (see note above).
+    def load_locations(self, places: TextIO) -> None:
+        """
+        Create all the Location objects and store them in a list
+
+        /position: tuple[int, int]
+        brief_description: str
+        /long_description: str
+        /available_directions: list[str]
+        /items: list[Item]
+        visited: bool
+        """
+        locations = places.readlines()
+        long_description = []
+        description = ''
+
+        # Fill list with descriptions for the locations, except for LOCATION -1
+        for line in locations:
+            if line == '\n':
+                long_description.append(description)
+                description = ''
+            else:
+                description = description + line
+
+        # Find positions of locations on map
+        positions = []
+
+        for num in range(1, 10):
+            for r in range(len(self.map)):
+                for c in range(len(self.map[r])):
+                    if self.map[r][c] == num:
+                        positions.append((r, c))
+
+        # Get available directions
+        directions = []
+
+        for location in long_description:
+            lst = []
+
+            if 'East' in location:
+                lst.append('East')
+            if 'South' in location:
+                lst.append('South')
+            if 'West' in location:
+                lst.append('West')
+            if 'North' in location:
+                lst.append('North')
+
+            directions.append(lst)
+
+        # Find location of items
+        item_file = open('items.txt').readlines()
+        item_file.sort()
+        items = []
+
+        for i in range(len(item_file)):
+            item_file[i] = item_file[i].split()
+
+        for item in range(len(item_file)):
+            start = int(item_file[item][0])
+            target = int(item_file[item][1])
+            points = int(item_file[item][2])
+            name = item_file[item][3]
+
+            items.append(Item(name, start, target, points))
+
+        # STILL UNDER CONSTRUCTION
 
     # NOTE: The method below is REQUIRED. Complete it exactly as specified.
     def get_location(self, x: int, y: int) -> Optional[Location]:
         """Return Location object associated with the coordinates (x, y) in the world map, if a valid location exists at
          that position. Otherwise, return None. (Remember, locations represented by the number -1 on the map should
          return None.)
-        """
 
-        # TODO: Complete this method as specified. Do not modify any of this function's specifications.
+         >>> world = World(open("map.txt"), open("locations.txt"), open("items.txt"))
+        >>> world.get_location(open("locations.txt"))
+        """
+        num = self.map[x][y]
+
+        if num == -1:
+            return None
