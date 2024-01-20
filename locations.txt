@@ -1,11 +1,9 @@
 LOCATION -1
-0
 That way is blocked.
 That way is blocked.
 END
 
 LOCATION 1
-0
 You are on the first floor of the Robarts Library. There is an empty study room to the South, an exit from the library to the East.
 There are escalators leading to the second floor to the West.
 You are on the first floor of the Robarts Library. It's usually crowded at this time of the day, but today it's eerily quiet.
@@ -14,14 +12,12 @@ service desk, looking bored and sleepy. There is an empty study room to the Sout
 END
 
 LOCATION 2
-0
 This study room is completely empty.
 You are in an empty study room. And by empty, we mean, absolutely empty. All the tables and chairs have been taken out,
 the whiteboards taken off the wall, not even the carpeting is left. Are they planning to do something else with this space?
 END
 
 LOCATION 3
-0
 The escalators are devoid of people.
 You are at the bottom of the escalators. The escalator going up to the second floor is to the West, the entrance to Robarts 
 is to the East. Some of the lights are flickering, and suddenly you get the eerie sense that something is off. It is quiet.
@@ -29,7 +25,6 @@ Too quiet. Midterm season is one of the busiest times for libraries, where is ev
 END
 
 LOCATION 4
-0
 You are on the second floor of the Robarts Library. There is a Starbucks North, escalators East, and a study hall South.
 You are on the second floor of the Robarts Library. It is usually crowded, especially around midterms, but today it's quiet.
 There are only a few students in the study hall, and even less in the Starbucks. The Starbucks is to
@@ -37,20 +32,17 @@ the North, escalators to the East, and a study hall to the South.
 END
 
 LOCATION 5
-0
 You are at the Starbucks on the second floor of the Robarts Library. The escalators are to the South.
 There are very few people waiting in line to order. Starbucks made changes to their menu, a new item has been added.
 The baristas are trying their best to promote the new item to the costumers. The escalators are to the South.
 END
 
 LOCATION 6
-0
 You are at the study room on the second floor of the Robarts Library. The escalators are to the North.
 There are a couple people studying, but even more sleeping. You see a table scattered with papers and open books,
 but no one is near it. Who would leave so much stuff on a table only to leave? The escalators are to the North.
 
 LOCATION 7
-0
 You are outside the Robarts library. The entrance back into Robarts is to the West.
 You are outside the Robarts library on a crowded street. There is a smell of coffee in the air.
 Something shiny is nearby on the grass, its probably nothing important. Innis College is to the 
@@ -58,7 +50,6 @@ North and the entrance back into Robarts is to the West.
 END
 
 LOCATION 8
-0
 You are outside Innis College, Robarts is to the South and a tree to the East.
 You are outside Innis College on a busy street. There are some students sitting on the benches and others playing frisbee
 on the grass. It is not winter yet, so flowers are still vibrant and the trees still have most of their leaves. There is 
@@ -66,7 +57,6 @@ a big tree West of the entrance which blocks the sunlight, a perfect spot for a 
 END
 
 LOCATION 9
-0
 You are under a tree by the entrance of Innis College. The entrance to Innis is to the West.
 Because of your superior tree skills, you can quickly tell that the tree is an Oak Tree, which can live up to one thousand years!
 On the grass behind the tree you notice something red. What could it be? The entrance to Innis is the West.
