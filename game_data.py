@@ -285,7 +285,7 @@ class World:
 
             directions.append(lst)
 
-        # Find location of items
+        # Find location of items and create new Item objects
         item_file = open('items.txt').readlines()
         item_file.sort()
         items = []
