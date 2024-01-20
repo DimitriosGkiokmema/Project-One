@@ -331,7 +331,7 @@ class World:
                     new_item = item
 
             place = Location(positions[i], short_descriptions[i], long_description[i], directions[i], new_item)
-            self.locations.append(place
+            self.locations.append(place)
 
         # Add location for LOCATION -1
         self.locations.append(Location())
