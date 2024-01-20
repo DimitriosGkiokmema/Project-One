@@ -210,7 +210,7 @@ class World:
         # 2. Make sure the Item class is used to represent each item.
 
     # NOTE: The method below is REQUIRED. Complete it exactly as specified.
-    def load_map(self, map_data: TextIO) -> list[list[int]]:
+        def load_map(self, map_data: TextIO) -> list[list[int]]:
         """
         Store map from open file map_data as the map attribute of this object, as a nested list of integers like so:
 
@@ -220,9 +220,20 @@ class World:
         then load_map should assign this World object's map to be [[1, 2, 5], [3, -1, 4]].
 
         Return this list representation of the map.
+        >>> world = World(open("map.txt"), open("locations.txt"), open("items.txt"))
+        >>> world.load_map(open("map.txt"))
+        [[5, -1, -1, 8, 9], [4, 3, 1, 7, -1], [6, -1, 2, -1, -1]]
         """
+        map_list = map_data.readlines()
 
-        # TODO: Complete this method as specified. Do not modify any of this function's specifications.
+        # put each number into different indexes in the list
+        for i in range(len(map_list)):
+            map_list[i] = map_list[i].split()
+
+        # convert each num from str to int
+        map_list = [[int(i) for i in lst] for lst in map_list]
+
+        return map_list
 
     # TODO: Add methods for loading location data and item data (see note above).
 
