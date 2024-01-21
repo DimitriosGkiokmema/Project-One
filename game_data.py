@@ -181,7 +181,9 @@ class Player:
         self.inventory = []
         self.victory = False
 
-    def update(self, direction: str) -> None:
+    def update(self, direction: str, current_location: Location) -> None:
+        """Update the player's position based on the specified direction and perform actions in the current location.
+        """
         map_width = 5
         map_length = 5
 
@@ -194,6 +196,21 @@ class Player:
         if direction == 'South' and self.x < map_length - 1:
             self.y += 1
 
+        # Check if the player is in a location with items
+        if 'Pick up items' in current_location.available_actions():
+            self.pick_up_item(current_location)
+
+    def pick_up_item(self, location: Location) -> None:
+        """
+        Pick up items available in the current location and add them to the player's inventory.
+        """
+        items_to_pick_up = [item for item in location.items if item not in self.inventory]
+
+        for item in items_to_pick_up:
+            print(f"You pick up {item.name}.")
+            self.inventory.append(item)
+
+        location.items = [item for item in location.items if item not in items_to_pick_up]
 
 class World:
     """A text adventure game world storing all location, item and map data.
