@@ -147,6 +147,27 @@ class Location:
         return actions
 
 
+class PuzzleLocation(Location):
+    """A location in our text adventure game world with an additional puzzle.
+
+    Instance Attributes:
+        - puzzle_code: An optional passcode required to solve the puzzle in this location.
+
+    Representation Invariants:
+        - self.puzzle_code is None or type(self.puzzle_code) == int
+    """
+    puzzle_code: Optional[int]
+
+    def __init__(self, position: tuple[int, int], brief_description: str, long_description: str,
+                 available_directions: list[str], items: list[Item] = None, puzzle_code: Optional[int] = None) -> None:
+        """Initialize a new location with a puzzle.
+
+        If puzzle_code is not None, the player needs to enter this code to solve the puzzle.
+        """
+        super().__init__(position, brief_description, long_description, available_directions, items)
+        self.puzzle_code = puzzle_code
+                  
+
 class Player:
     """
     A Player in the text adventure game.
@@ -212,6 +233,23 @@ class Player:
 
         location.items = [item for item in location.items if item not in items_to_pick_up]
 
+    def solve_puzzle(self, location: PuzzleLocation, code: int) -> None:
+        """Attempt to solve the puzzle in the given PuzzleLocation with the provided passcode."""
+        if location.puzzle_code is not None and code == location.puzzle_code:
+            print(f"You successfully solved the puzzle at {location.position}!")
+        else:
+            print("Incorrect passcode. Try again!")
+
+    def execute_command(self, command: str, world: World) -> None:
+        """Execute the specified command based on the player's input."""
+        if command.lower() == "solve":
+            puzzle_location = world.get_puzzle_location(self.x, self.y)
+            if puzzle_location:
+                code = input("Enter the passcode to solve the puzzle: ")
+                self.solve_puzzle(puzzle_location, int(code))
+            else:
+                print("No puzzle to solve here.")
+             
 class World:
     """A text adventure game world storing all location, item and map data.
 
@@ -255,6 +293,15 @@ class World:
         # accordingly. The only requirements:
         # 1. Make sure the Location class is used to represent each location.
         # 2. Make sure the Item class is used to represent each item.
+
+  def get_puzzle_location(self, x: int, y: int) -> Optional[PuzzleLocation]:
+        """Return PuzzleLocation object associated with the coordinates (x, y) in the world map, if a valid location
+         exists at that position, and it's a puzzle location. Otherwise, return None.
+        """
+        location = self.get_location(x, y)
+        if isinstance(location, PuzzleLocation):
+            return location
+        return None
 
     # NOTE: The method below is REQUIRED. Complete it exactly as specified.
     def load_map(self, map_data: TextIO) -> list[list[int]]:
@@ -349,7 +396,7 @@ class World:
 
             directions.append(lst)
 
-       # Create Location objects for each location (except LOCATION -1 and 10)
+        # Create Location objects for each location (except LOCATION -1 and 10)
         for i in range(9):
             new_item = None
 
@@ -358,8 +405,14 @@ class World:
                     new_item = item
 
             place = Location(positions[i], short_descriptions[i], long_description[i], directions[i], new_item)
+
+            # Add the puzzle to Location 5
+            if i == 4:  # Assuming Location 5 corresponds to index 4 in the loop
+                passcode_item = Item("Passcode", i, i, 0)  # We can adjust the points as needed
+                place.items.append(passcode_item)
+
             self.locations.append(place)
-         
+
         # Add location for LOCATION -1
         location_file = places.readlines()
         index = 0
@@ -375,7 +428,7 @@ class World:
         dead_end = 'LOCATION -1\nThat way is blocked.\nThat way is blocked.\nEND\n'
 
         # anytime player goes out of bounds, LOCATION -1 is displayed
-        self.locations.append(Location((0, 1), dead_end, dead_end, [],))
+        self.locations.append(Location((0, 1), dead_end, dead_end, [], ))
 
     def short_descriptions(self, long: list[str]) -> list[str]:
         """
