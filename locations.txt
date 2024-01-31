@@ -1,21 +1,26 @@
 LOCATION 1
+OBJECTIVE: T-CARD
 You are on the first floor of the Robarts Library. There is an empty study room to the South, an exit from the library to the East.
 There are escalators leading to the second floor to the West.
 You are on the first floor of the Robarts Library. It's usually crowded at this time of the day, but today it's eerily quiet.
 Only a few students are studying inside one of the study rooms. You better not disturb them. A librarian stands near the
-service desk, looking bored and sleepy. There is an empty study room to the South, an exit from the library to the East.
+service desk, she is asking for your T-Card. You don't have it on you, so you say that you will give it to her later.
+There is an empty study room to the South, an exit from the library to the East.
 END
 
 LOCATION 2
-This study room is completely empty. The main entrance to Robarts is to the North.
+OBJECTIVE: FIND CODE TO OPEN THE SAFE
+This study room is completely empty. There is a safe that needs a code to open. The main entrance to Robarts is to the North.
 You are in an empty study room. And by empty, we mean, absolutely empty. All the tables and chairs have been taken out,
 the whiteboards taken off the wall, not even the carpeting is left. Are they planning to do something else with this space?
+To make it even weirder, there is a metal safe in the middle of the room, it's asking for a code. What could the code be:
+The main entrance to Robarts is to the North.
 END
 
 LOCATION 3
-The escalators are devoid of people.
-You are at the bottom of the escalators. The escalator going up to the second floor is to the West, the entrance to Robarts
-is to the East. Some of the lights are flickering, and suddenly you get the eerie sense that something is off. It is quiet.
+You are at the bottom of the escalators on the first floor of the Robarts Library. The escalators are devoid of people.
+The escalator going up to the second floor is to the West, the entrance to Robarts is to the East.
+Some of the lights are flickering, and suddenly you get the eerie sense that something is off. It is quiet.
 Too quiet. Midterm season is one of the busiest times for libraries, where is everyone?
 END
 
@@ -27,18 +32,24 @@ the North, escalators to the East, and a study hall to the South.
 END
 
 LOCATION 5
-You are at the Starbucks on the second floor of the Robarts Library. The escalators are to the South.
+OBJECTIVE: BACKPACK
+You are at the Starbucks on the second floor of the Robarts Library. A new item costs $8.99. The escalators are to the South.
 There are very few people waiting in line to order. Starbucks made changes to their menu, a new item has been added.
-The baristas are trying their best to promote the new item to the costumers. The escalators are to the South.
+The baristas are trying their best to promote the new item to the costumers. You need to study, Starbucks isn't the best
+study spot, but it is quiet! To study, you need you laptop and notebooks, which are in your backpack. The bag isn't on
+you, you must have misplaced it somewhere. Find your bag and bring it here to study! The escalators are to the South.
 END
 
 LOCATION 6
+OBJECTIVE: LUCKY-PEN
 You are at the study room on the second floor of the Robarts Library. The escalators are to the North.
 There are a couple of people studying, but even more sleeping. You see a table scattered with papers and open books,
-but no one is near it. Who would leave so much stuff on a table only to leave? The escalators are to the North.
+but no one is near it. Who would leave so much stuff on a table only to leave? You notice one of your friends studying
+in the corner, he asks you for a pen. You dont have one on you, but say that you will find one for him.
+The escalators are to the North.
 
 LOCATION 7
-You are outside the Robarts library. The entrance back into Robarts is to the West.
+You are outside the Robarts library. The entrance back into Robarts is to the West. Innis is North.
 You are outside the Robarts library on a crowded street. There is a smell of coffee in the air.
 Something shiny is nearby on the grass, it's probably nothing important. Innis College is to the
 North and the entrance back into Robarts is to the West.
@@ -48,13 +59,16 @@ LOCATION 8
 You are outside Innis College, Robarts is to the South and a tree to the East.
 You are outside Innis College on a busy street. There are some students sitting on the benches and others playing frisbee
 on the grass. It is not winter yet, so flowers are still vibrant and the trees still have most of their leaves. There is
-a big tree West of the entrance which blocks the sunlight, a perfect spot for a nap! Robarts is to the South.
+a big tree East of the entrance which blocks the sunlight, a perfect spot for a nap! Robarts is to the South.
 END
 
 LOCATION 9
+OBJECTIVE: CHEAT-SHEET
 You are under a tree by the entrance of Innis College. The entrance to Innis is to the West.
-Because of your superior tree skills, you can quickly tell that the tree is an Oak Tree, which can live up to one thousand years!
-On the grass behind the tree you notice something red. What could it be? The entrance to Innis is the West.
+Because of your superior tree skills, you can quickly tell that the tree is an Oak Tree, which can live up
+to one thousand years! On the grass behind the tree you notice something red. What could it be?
+You don't want to fall asleep under the tree, its better to study! Find your cheat sheet and bring it here
+to study for the exam. The entrance to Innis is the West.
 END
 
 LOCATION -1
