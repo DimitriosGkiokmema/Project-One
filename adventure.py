@@ -30,12 +30,17 @@ if __name__ == "__main__":
 
     menu = ["look", "inventory", "score", "quit", "back"]
 
-    while not p.victory:
+        while not p.victory:
         location = w.get_location(p.x, p.y)
 
-        # TODO: ENTER CODE HERE TO PRINT LOCATION DESCRIPTION
-        # Depending on whether or not it's been visited before,
-        # print either full description (first time visit) or brief description (every subsequent visit)
+        # prints either full description (first time visit) or brief description (every subsequent visit)
+        if location.visited:
+            print(location.brief_description)
+        else:
+            print(location.long_description)
+
+        # No matter what location this is, since we visited it .visited is now true
+        location.visited = True
 
         print("What to do? \n")
         print("[menu]")
@@ -49,10 +54,27 @@ if __name__ == "__main__":
                 print(option)
             choice = input("\nChoose action: ")
 
-        # TODO: CALL A FUNCTION HERE TO HANDLE WHAT HAPPENS UPON THE PLAYER'S CHOICE
-        #  REMEMBER: the location = w.get_location(p.x, p.y) at the top of this loop will update the location if
-        #  the choice the player made was just a movement, so only updating player's position is enough to change the
-        #  location to the next appropriate location
+        choice = choice.title()
+
+        if choice == 'Look':
+            location.visited = False
+        elif choice == 'inventory':
+            pass  # TODO: CREATE FUNCTION FOR THIS
+        elif choice == 'score':
+            pass  # TODO: CREATE FUNCTION FOR THIS
+        elif choice == 'quit':
+            pass  # TODO: CREATE FUNCTION FOR THIS
+        elif choice == 'back':
+            pass  # TODO: CREATE FUNCTION FOR THIS
+        elif choice in location.available_directions:
+            p.update(choice)
+        elif choice in ['East', 'North', 'South', 'West']:  # Direction not allowed
+            print(w.get_location(1, 0).long_description)
+        else:  # Only occurs if choice is not any of the options
+            print('\nNot an action!!!')
+
+        print('')
+
         #  Possibilities:
         #  A helper function such as do_action(w, p, location, choice)
         #  OR A method in World class w.do_action(p, location, choice)
