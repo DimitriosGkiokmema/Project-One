@@ -245,8 +245,11 @@ class World:
         # BUT DO NOT RENAME OR REMOVE ANY EXISTING METHODS/ATTRIBUTES IN THIS CLASS
 
         # The map MUST be stored in a nested list as described in the load_map() function's docstring below
-        self.map = self.load_map(map_data)
-        self.load_locations(location_data)  # Creates locations list
+        self.map = self.load_map(map_data)  # Creates map
+        self.items = []
+        self.load_items(items_data)  # Creates item list
+        self.locations = []
+        self.load_locations(location_data)  # Fills locations list
 
         # NOTE: You may choose how to store location and item data; create your own World methods to handle these
         # accordingly. The only requirements:
@@ -279,6 +282,27 @@ class World:
 
         return map_list
 
+     def load_items(self, item_file: TextIO):
+        """
+        Create Item objects and store them in self.items
+        >>> world = World(open("map.txt"), open("locations.txt"), open("items.txt"))
+        >>> [item.name for item in world.items]
+        ['T-card', 'Cheat_Sheet', 'Lucky_Pen', 'Backpack']
+        """
+        # Find location of items and create Item objects
+        item_file = item_file.readlines()
+
+        for i in range(len(item_file)):
+            item_file[i] = item_file[i].split()
+
+        for item in range(len(item_file)):
+            start = int(item_file[item][0])
+            target = int(item_file[item][1])
+            points = int(item_file[item][2])
+            name = item_file[item][3]
+
+            self.items.append(Item(name, start, target, points))
+
     def load_locations(self, places: TextIO) -> None:
         """
         Create all the Location objects and store them in a list
@@ -288,13 +312,14 @@ class World:
         long_description = []
         description = ''
 
-        # Fill list with descriptions for the locations, except for LOCATION -1
+        # Fill list with descriptions for the locations 1-9
         for line in location_file:
             if line == '\n':
                 long_description.append(description)
                 description = ''
             else:
                 description = description + line
+        long_description.append(description)  # adds location -1
 
         short_descriptions = self.short_descriptions(long_description)
 
@@ -324,22 +349,7 @@ class World:
 
             directions.append(lst)
 
-        # Find location of items and create Item objects
-        item_file = open('items.txt').readlines()
-        item_file.sort()
-
-        for i in range(len(item_file)):
-            item_file[i] = item_file[i].split()
-
-        for item in range(len(item_file)):
-            start = int(item_file[item][0])
-            target = int(item_file[item][1])
-            points = int(item_file[item][2])
-            name = item_file[item][3]
-
-            self.items.append(Item(name, start, target, points))
-
-        # Create Location objects for each location (except LOCATION -1)
+       # Create Location objects for each location (except LOCATION -1 and 10)
         for i in range(9):
             new_item = None
 
@@ -349,9 +359,23 @@ class World:
 
             place = Location(positions[i], short_descriptions[i], long_description[i], directions[i], new_item)
             self.locations.append(place)
-
+         
         # Add location for LOCATION -1
-        self.locations.append(Location())
+        location_file = places.readlines()
+        index = 0
+        dead_end = ''
+
+        while index < len(location_file):
+            if location_file[index] == 'LOCATION -1\n':
+                dead_end += location_file[index]
+
+            elif 'LOCATION -1\n' in dead_end:
+                dead_end += location_file[index]
+            index += 1
+        dead_end = 'LOCATION -1\nThat way is blocked.\nThat way is blocked.\nEND\n'
+
+        # anytime player goes out of bounds, LOCATION -1 is displayed
+        self.locations.append(Location((0, 1), dead_end, dead_end, [],))
 
     def short_descriptions(self, long: list[str]) -> list[str]:
         """
@@ -361,15 +385,17 @@ class World:
         current place is not included
         """
         short = []
+        word_len = 0
 
         for description in long:
             max_index = 0
 
-            for d in ['East', 'West', 'South', 'North']:
-                if description.index(d) > max_index:
-                    max_index = description.index(d)
+            for i in ['East', 'West', 'South', 'North']:
+                if i in description and description.index(i) > max_index:
+                    max_index = description.index(i)
+                    word_len = len(i)
 
-            short.append(description[:max_index + 1] + '\nEND')
+            short.append(description[: max_index + word_len + 1] + '\nEND')
 
         return short
 
@@ -380,11 +406,15 @@ class World:
          return None.)
 
          >>> world = World(open("map.txt"), open("locations.txt"), open("items.txt"))
-        >>> world.get_location(open("locations.txt"))
+        >>> 'LOCATION 1' in world.get_location(0, 0).long_description
+        True
         """
-        num = self.map[x][y]
+        if x < len(self.map[0]) and y < len(self.map):
+            location_num = self.map[y][x]
 
-        if num == -1:
-            return None
+            if location_num == -1:
+                return self.locations[9]
+            else:
+                return self.locations[location_num - 1]
         else:
-            return self.locations[num - 1]
+            return self.locations[9]
