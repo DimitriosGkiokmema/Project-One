@@ -32,7 +32,7 @@ class Item:
 
 
     Representation Invariants:
-        - self.name != ""
+        - isinstance(self.name, str) and self.name != ""
         - self.start_position >= 0
         - self.target_position >= 0
         - self.target_points >= 0
@@ -65,10 +65,9 @@ class Item:
         """
         return (
             f"{self.name} - Start: {self.start_position}, "
-            f"Target: {self.target_position}, Points: {self.target_points}"
-        )
-    
-    
+            f"Target: {self.target_position}, Points: {self.target_points}")
+
+
 class Location:
     """A location in our text adventure game world.
 
@@ -117,10 +116,10 @@ class Location:
         self.brief_description = brief_description
         self.long_description = long_description
         self.available_directions = available_directions
-        self.items = [] if items is None else items
+        self.items = []
         self.visited = False
 
-    def available_actions(self) -> list[str]:
+    def available_actions(self):
         """
         Return the available actions in this location.
         The actions should depend on the items available in the location
@@ -136,13 +135,6 @@ class Location:
         # Check if the location has items
         if self.items:
             actions.append("Pick up items")
-
-        # Check if the player has the required items for the exam
-        required_items = {'T-card', 'Cheat Sheet', 'Lucky Pen'}
-        player_items = {item.name for item in self.items}
-
-        if all(item in player_items for item in required_items):
-            actions.append("Take the exam")
 
         return actions
 
@@ -166,7 +158,7 @@ class PuzzleLocation(Location):
         """
         super().__init__(position, brief_description, long_description, available_directions, items)
         self.puzzle_code = puzzle_code
-                  
+
 
 class Player:
     """
@@ -187,6 +179,7 @@ class Player:
     y: int
     inventory: list[Item]
     victory: bool
+    score: int = 0
 
     def __init__(self, x: int, y: int) -> None:
         """
@@ -202,54 +195,53 @@ class Player:
         self.inventory = []
         self.victory = False
 
-    def update(self, direction: str, current_location: Location) -> None:
-        """Update the player's position based on the specified direction and perform actions in the current location.
-        """
+    def update(self, direction: str) -> bool:
         map_width = 5
         map_length = 5
 
-        if direction == 'East' and self.x < map_width - 1:
+        if direction == 'Go East' and self.x < map_width:
             self.x += 1
-        if direction == 'West' and self.x > 0:
+        elif direction == 'Go West' and self.x > 0:
             self.x -= 1
-        if direction == 'North' and self.x > 0:
+        elif direction == 'Go North' and self.y > 0:
             self.y -= 1
-        if direction == 'South' and self.x < map_length - 1:
+        elif direction == 'Go South' and self.y < map_length:
             self.y += 1
+        else:
+            return False
 
-        # Check if the player is in a location with items
-        if 'Pick up items' in current_location.available_actions():
-            self.pick_up_item(current_location)
+        return True
+
+    def found_all_items(self) -> bool:
+        # Check if the player has the required items for the exam
+        required_items = {'T_card', 'Cheat_Sheet', 'Lucky_Pen', 'Backpack'}
+        player_items = {item.name for item in self.inventory}
+
+        return required_items == player_items
 
     def pick_up_item(self, location: Location) -> None:
         """
         Pick up items available in the current location and add them to the player's inventory.
         """
-        items_to_pick_up = [item for item in location.items if item not in self.inventory]
+        items_to_pick_up = []
+        if location.items is not None:
+            # items_to_pick_up = [item for item in location.items if item not in self.inventory]
+            for item in location.items:
+                if item not in self.inventory:
+                    items_to_pick_up.append(item)
 
         for item in items_to_pick_up:
             print(f"You pick up {item.name}.")
-            self.inventory.append(item)
+            self.score += 1
+
+            if self.inventory:
+                self.inventory.append(item)
+            else:
+                self.inventory = [item]
 
         location.items = [item for item in location.items if item not in items_to_pick_up]
 
-    def solve_puzzle(self, location: PuzzleLocation, code: int) -> None:
-        """Attempt to solve the puzzle in the given PuzzleLocation with the provided passcode."""
-        if location.puzzle_code is not None and code == location.puzzle_code:
-            print(f"You successfully solved the puzzle at {location.position}!")
-        else:
-            print("Incorrect passcode. Try again!")
 
-    def execute_command(self, command: str, world: World) -> None:
-        """Execute the specified command based on the player's input."""
-        if command.lower() == "solve":
-            puzzle_location = world.get_puzzle_location(self.x, self.y)
-            if puzzle_location:
-                code = input("Enter the passcode to solve the puzzle: ")
-                self.solve_puzzle(puzzle_location, int(code))
-            else:
-                print("No puzzle to solve here.")
-             
 class World:
     """A text adventure game world storing all location, item and map data.
 
@@ -292,16 +284,9 @@ class World:
         # NOTE: You may choose how to store location and item data; create your own World methods to handle these
         # accordingly. The only requirements:
         # 1. Make sure the Location class is used to represent each location.
+        # Done
         # 2. Make sure the Item class is used to represent each item.
-
-  def get_puzzle_location(self, x: int, y: int) -> Optional[PuzzleLocation]:
-        """Return PuzzleLocation object associated with the coordinates (x, y) in the world map, if a valid location
-         exists at that position, and it's a puzzle location. Otherwise, return None.
-        """
-        location = self.get_location(x, y)
-        if isinstance(location, PuzzleLocation):
-            return location
-        return None
+        # Done
 
     # NOTE: The method below is REQUIRED. Complete it exactly as specified.
     def load_map(self, map_data: TextIO) -> list[list[int]]:
@@ -329,7 +314,7 @@ class World:
 
         return map_list
 
-     def load_items(self, item_file: TextIO):
+    def load_items(self, item_file: TextIO):
         """
         Create Item objects and store them in self.items
         >>> world = World(open("map.txt"), open("locations.txt"), open("items.txt"))
@@ -405,12 +390,6 @@ class World:
                     new_item = item
 
             place = Location(positions[i], short_descriptions[i], long_description[i], directions[i], new_item)
-
-            # Add the puzzle to Location 5
-            if i == 4:  # Assuming Location 5 corresponds to index 4 in the loop
-                passcode_item = Item("Passcode", i, i, 0)  # We can adjust the points as needed
-                place.items.append(passcode_item)
-
             self.locations.append(place)
 
         # Add location for LOCATION -1
@@ -428,7 +407,7 @@ class World:
         dead_end = 'LOCATION -1\nThat way is blocked.\nThat way is blocked.\nEND\n'
 
         # anytime player goes out of bounds, LOCATION -1 is displayed
-        self.locations.append(Location((0, 1), dead_end, dead_end, [], ))
+        self.locations.append(Location((0, 1), dead_end, dead_end, [],))
 
     def short_descriptions(self, long: list[str]) -> list[str]:
         """
@@ -458,7 +437,7 @@ class World:
          that position. Otherwise, return None. (Remember, locations represented by the number -1 on the map should
          return None.)
 
-         >>> world = World(open("map.txt"), open("locations.txt"), open("items.txt"))
+        >>> world = World(open("map.txt"), open("locations.txt"), open("items.txt"))
         >>> 'LOCATION 1' in world.get_location(0, 0).long_description
         True
         """
@@ -471,3 +450,4 @@ class World:
                 return self.locations[location_num - 1]
         else:
             return self.locations[9]
+         
