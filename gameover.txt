@@ -1,0 +1,26 @@
+go east
+INVENTORY
+view
+go north
+go east
+go west
+go south
+go west
+go west
+go west
+go south
+go north
+go north
+go north
+pick up items
+go south
+go south
+pick up items
+go north
+go east
+go east
+go south
+open safe
+1
+open safe
+2
