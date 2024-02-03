@@ -40,6 +40,48 @@
 	\end{itemize}
 
 % Uncomment below section if you have more enhancements; copy-paste as many times as needed
+\item Describe your enhancement here \#2
+	\begin{itemize}
+	\item Basic description of what the enhancement is:
+	Extra action: back
+	This allows the player to undo the last move recorded.
+	Any variables or locations that were changed in the last turn are returned to what they were before the last turn
+	\item Complexity level (low/medium/high): low
+	\item Reasons you believe this is the complexity level (e.g. mention implementation details)
+	At first we thought that this would be a difficult thing to implement, but was way easier in the end.
+	All we did was assign a str to a variable that describes the actions taken in a turn.
+	If the player types back, that variable is interpreted and the opposite happens
+	For example, if you picked up an item and then typed back, the item is dropped
+	% Feel free to add more subheadings if you feel the need
+	\end{itemize}
+
+\item Describe your enhancement here \#3
+	\begin{itemize}
+	\item Basic description of what the enhancement is:
+	A new item and location descriptions (or levels) were added
+	\item Complexity level (low/medium/high): low
+	\item Reasons you believe this is the complexity level (e.g. mention implementation details)
+	All we had to implement these was add stuff to the map, locations, and items files
+	Our code in adventure and game_data took care of the rest
+	Thus, this had a low complexity level because all we had to do was write more in the files
+	% Feel free to add more subheadings if you feel the need
+	\end{itemize}
+
+\item Describe your enhancement here \#4
+	\begin{itemize}
+	\item Basic description of what the enhancement is:
+	A new action to view tasks like where to deposit the items
+	Typing objectives prints where every item has to be deposited and reminds you that the safe needs to be opened
+	To win the game, every single one of these conditions must be met
+	\item Complexity level (low/medium/high): low
+	\item Reasons you believe this is the complexity level (e.g. mention implementation details)
+    When adventure.py is ran, it creates a dict that displays the deposit locations of every item
+    that is not already deposited in its correct location.
+    This was not to difficult to code, all we had to do was loop through a list that contained all items in the game,
+    check if they are at the correct location, and if not print where they need to go
+	% Feel free to add more subheadings if you feel the need
+	\end{itemize}
+ 
 %\item Describe your enhancement here
 %	\begin{itemize}
 %	\item Basic description of what the enhancement is:
