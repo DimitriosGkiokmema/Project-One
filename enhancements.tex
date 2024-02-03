@@ -6,7 +6,7 @@
 \usepackage[margin=0.75in]{geometry}
 
 \title{CSC111 Winter 2024 Project 1}
-\author{TODO: FILL IN YOUR NAME(S) HERE}
+\author{Dimitrios Gkiokmema, Maya Edri}
 \date{\today}
 
 \begin{document}
@@ -19,9 +19,23 @@
 
 \item Describe your enhancement \#1 here
 	\begin{itemize}
-	\item Brief description of what the enhancement is (if it's a puzzle, also describe what steps the player must take to solve it):
-	\item Complexity level (choose from low/medium/high):
+	\item Brief description of what the enhancement is (if it's a puzzle, also describe what steps the player must take to solve it): 
+ 
+ We enhanced our text adventure game by introducing a new puzzle that requires the player to decipher a code to access a specific location. The player needs to find clues in different locations, gather information, and use it to decode the passcode for a locked area.  Success grants access to the last item in the game.
+ 
+\textbf{Steps to Solve:}
+        \begin{enumerate}
+            \item The player reaches a location with a Puzzle, represented by the PuzzleLocation class.
+            \item The player is prompted to enter a passcode to solve the puzzle.
+            \item The player has a limited number of attempts to enter the correct passcode.
+            \item If the correct passcode is entered, the player successfully solves the puzzle and gains access to the last item in the game.
+        \end{enumerate}
+
+	\item Complexity level (choose from low/medium/high): Medium
+ 
 	\item Reasons you believe this is the complexity level (e.g. mention implementation details, how much code did you have to add/change from the baseline, what challenges did you face, etc.)
+ Implementing this enhancement involved moderate complexity. We had to create a new class, \texttt{PuzzleLocation}, that inherits from the \texttt{Location} class but includes an additional attribute \texttt{puzzle\_code}. We also added a new method, \texttt{solve\_puzzle}, to the \texttt{Player} class, allowing the player to attempt to decipher the passcode within a limited number of tries. The complexity increased due to the need for coordinating interactions between the player, and combining pieces of information from different locations.
+
 	% Feel free to add more subheadings if you need
 	\end{itemize}
 
