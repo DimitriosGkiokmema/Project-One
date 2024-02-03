@@ -159,6 +159,22 @@ class PuzzleLocation(Location):
         super().__init__(position, brief_description, long_description, available_directions, items)
         self.puzzle_code = puzzle_code
 
+     def solve_puzzle(self, attempts: int, max_attempts: int = 6) -> bool:
+        """Attempt to solve the puzzle in the given PuzzleLocation."""
+        if attempts < max_attempts:
+            passcode = input('Enter the three digit code for the safe.\nNote that the code only contains numbers: ')
+
+            if int(passcode) == self.puzzle_code:
+                print(f"You successfully solved the puzzle at location {self.position}!")
+                return True
+            else:
+                print("Incorrect passcode. Try again!")
+
+            attempts += 1
+        else:
+            print(f"Sorry, you've reached the maximum number of attempts ({max_attempts}). Puzzle unsolved.")
+            return False
+
 
 class Player:
     """
@@ -168,12 +184,14 @@ class Player:
         - x and y are the coordinates of the player in the map
         - inventory keeps track of items picked up
         - victory turns true when player has all items in inventory
+        - score keeps track of the player's score
 
     Representation Invariants:
         - 0 <= x < width of map
         - 0 <= y < length of map
         - inventory holds only Items
-        - victory only true when game is won
+        - victory only true when all items are found and deposited at the correct locations
+        - score >= 0
     """
     x: int
     y: int
@@ -212,26 +230,9 @@ class Player:
 
         return True
 
-     def solve_puzzle(self, location: PuzzleLocation, passcode: int, max_attempts: int = 6) -> None:
-        """Attempt to solve the puzzle in the given PuzzleLocation."""
-        if location.puzzle_code is not None:
-            attempts = 0
-
-            while attempts < max_attempts:
-                if passcode == location.puzzle_code:
-                    print(f"You successfully solved the puzzle at {location.position}!")
-                    return
-
-                print("Incorrect passcode. Try again!")
-                attempts += 1
-
-            print(f"Sorry, you've reached the maximum number of attempts ({max_attempts}). Puzzle unsolved.")
-        else:
-            print("This location does not have a puzzle.")
-
     def found_all_items(self) -> bool:
         # Check if the player has the required items for the exam
-        required_items = {'T_card', 'Cheat_Sheet', 'Lucky_Pen', 'Backpack'}
+        required_items = {'T_Card', 'Cheat_Sheet', 'Lucky_Pen', 'Backpack'}
         player_items = {item.name for item in self.inventory}
 
         return required_items == player_items
@@ -240,23 +241,44 @@ class Player:
         """
         Pick up items available in the current location and add them to the player's inventory.
         """
-        items_to_pick_up = []
-        if location.items is not None:
-            # items_to_pick_up = [item for item in location.items if item not in self.inventory]
-            for item in location.items:
-                if item not in self.inventory:
-                    items_to_pick_up.append(item)
+        print(f"You pick up {item.name}.")
+        self.score += 5
 
-        for item in items_to_pick_up:
-            print(f"You pick up {item.name}.")
-            self.score += 1
+        if self.inventory:
+            self.inventory.append(item)
+        else:
+            self.inventory = [item]
 
-            if self.inventory:
-                self.inventory.append(item)
-            else:
-                self.inventory = [item]
+        location.items = [i for i in location.items if i != item]
 
-        location.items = [item for item in location.items if item not in items_to_pick_up]
+    def drop_items(self, location: Location, choice: str, objectives: dict[str, bool]) -> bool:
+        index = self.find_item_index(self.inventory, choice)
+
+        if index != -1:
+            item = self.inventory.pop(self.find_item_index(self.inventory, choice))
+            location.items.append(item)
+            print('You dropped ', item.name)
+
+            for i in objectives:
+                if i in location.long_description:
+                    objectives[i] = True
+                    self.score += 5
+
+            return True
+        else:
+            print('Not a valid choice!')
+            return False
+    def find_item_index(self, lst: list[Item], choice: str) -> int:
+        """
+        The player enters the name of the item that is to be dropped.
+        This function finds the index of said item in a collection
+        of items (either self.inventory or location.items).
+        Returns -1 if target item not in list
+        """
+        for i in range(len(lst)):
+            if lst[i].name == choice:
+                return i
+        return -1
 
 
 class World:
@@ -400,31 +422,20 @@ class World:
 
         # Create Location objects for each location (except LOCATION -1 and 10)
         for i in range(9):
-            new_item = None
+            new_item = []
 
             for item in self.items:
-                if item.start_position == i:
-                    new_item = item
+                if item.start_position == i + 1:
+                    new_ite.append(item)
 
             place = Location(positions[i], short_descriptions[i], long_description[i], directions[i], new_item)
             self.locations.append(place)
 
         # Add location for LOCATION -1
-        location_file = places.readlines()
-        index = 0
-        dead_end = ''
-
-        while index < len(location_file):
-            if location_file[index] == 'LOCATION -1\n':
-                dead_end += location_file[index]
-
-            elif 'LOCATION -1\n' in dead_end:
-                dead_end += location_file[index]
-            index += 1
-        dead_end = 'LOCATION -1\nThat way is blocked.\nThat way is blocked.\nEND\n'
-
         # anytime player goes out of bounds, LOCATION -1 is displayed
-        self.locations.append(Location((0, 1), dead_end, dead_end, [],))
+        # remember that the description of location -1 was the last on added
+          dead_end = long_description[len(long_description) - 1]
+        self.locations.append(Location((0, 1), dead_end, dead_end, [], []))
 
     def short_descriptions(self, long: list[str]) -> list[str]:
         """
