@@ -1,0 +1,48 @@
+go east
+go north
+pick up items
+INVENTORY
+view
+go south
+pick up items
+INVENTORY
+view
+go west
+go west
+go west
+go south
+pick up items
+INVENTORY
+drop
+Lucky_Pen
+INVENTORY
+view
+go north
+go north
+pick up items
+INVENTORY
+drop
+Backpack
+INVENTORY
+view
+go south
+go east
+go east
+INVENTORY
+drop
+T_Card
+INVENTORY
+view
+go south
+open safe
+416
+SCORE
+go north
+go east
+go north
+go east
+INVENTORY
+drop
+Cheat_Sheet
+INVENTORY
+view
