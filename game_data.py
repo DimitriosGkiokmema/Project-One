@@ -212,6 +212,23 @@ class Player:
 
         return True
 
+     def solve_puzzle(self, location: PuzzleLocation, passcode: int, max_attempts: int = 6) -> None:
+        """Attempt to solve the puzzle in the given PuzzleLocation."""
+        if location.puzzle_code is not None:
+            attempts = 0
+
+            while attempts < max_attempts:
+                if passcode == location.puzzle_code:
+                    print(f"You successfully solved the puzzle at {location.position}!")
+                    return
+
+                print("Incorrect passcode. Try again!")
+                attempts += 1
+
+            print(f"Sorry, you've reached the maximum number of attempts ({max_attempts}). Puzzle unsolved.")
+        else:
+            print("This location does not have a puzzle.")
+
     def found_all_items(self) -> bool:
         # Check if the player has the required items for the exam
         required_items = {'T_card', 'Cheat_Sheet', 'Lucky_Pen', 'Backpack'}
