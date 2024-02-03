@@ -17,20 +17,23 @@ please consult our Course Syllabus.
 
 This file is Copyright (c) 2024 CSC111 Teaching Team
 """
+from game_data import World, Player, PuzzleLocation
 
-# Note: You may add in other import statements here as needed
-from game_data import World, Item, Location, Player
-
-# Note: You may add helper functions, classes, etc. here as needed
-
-# Note: You may modify the code below as needed; the following starter template are just suggestions
 if __name__ == "__main__":
-    w = World(open("map.txt"), open("locations.txt"), open("items.txt"))
+    with open('map.txt') as map_file, open('locations.txt') as location_file, open('items.txt') as item_file:
+        w = World(map_file, location_file, item_file)
     p = Player(2, 1)  # set starting location of player; you may change the x, y coordinates here as appropriate
+    safe = w.get_location(1, 1)
+    safe = PuzzleLocation(safe.position, safe.brief_description, safe.long_description, safe.available_directions, safe.items, 416)
+    safe_crack_attempts = 0
     quit_game = False
-    num_moves = 15
-
+    cracked_safe = False
+    num_moves = 20
+    last_move = ''
     menu = ["look", "inventory", "score", "quit", "back"]
+    # objectives represents which items have been deposited at the correct locations.
+    # The player can only win if all values in this variable are True
+    objectives = {'T_Card': False, 'Lucky_Pen': False, 'Backpack': False, 'Cheat_Sheet': False}
 
     s = ('You\'ve got an important exam coming up this evening, and you\'ve been studying for weeks. Last night was a\n'
          'particularly late night on campus. You had difficulty focusing, so rather than staying in one place, you\n'
@@ -54,6 +57,11 @@ if __name__ == "__main__":
         else:
             print(location.long_description)
 
+        if 'safe' in location.long_description:
+            menu = ["look", "inventory", "score", "quit", "back", 'open safe']
+        else:
+            menu = ["look", "inventory", "score", "quit", "back"]
+
         # No matter what location this is, since we visited it .visited is now true
         location.visited = True
 
@@ -75,28 +83,69 @@ if __name__ == "__main__":
         if choice == 'Look':
             location.visited = False
         elif choice == 'Inventory':
+            choice = input('\nTo view items in your inventory, enter view.\nTo drop items, enter drop\nYour choice: ')
+            inventory_items = [item.name for item in p.inventory]
+
             if len(p.inventory) == 0:
                 print('No items in your inventory!!!')
+            elif choice == 'view':
+                print(inventory_items)
+            elif choice == 'drop':
+                choice = input(f'Your inventory has {inventory_items}\nWhich item do you want to drop: ')
+                if p.drop_items(location, choice, objectives):
+                    last_move = 'dropped ' + choice
             else:
-                print([item.name for item in p.inventory])
+                print('Not a valid choice!')
+
         elif choice == 'Score':
             print('Your current score is ', p.score)
         elif choice == 'Quit':
             quit_game = True
-        elif choice == 'Back':
-            pass  # TODO: CREATE FUNCTION FOR THIS
+        elif choice == 'Open Safe' and 'open safe' in menu:
+            if not cracked_safe:
+                if safe.solve_puzzle(safe_crack_attempts):
+                    cracked_safe = True
+                    safe_crack_attempts += 1
+                    p.score += 15
+                num_moves -= 1
+            else:
+                print('You already solved the puzzle and opened the safe!!!')
+        elif choice == 'Objectives':
+            deposit = {'T_Card': 'Robarts entrance', 'Lucky_Pen': 'study room', 'Backpack': 'Starbucks', 'Cheat_Sheet': 'tree by Innis'}
+            for objective in objectives:
+                if not objectives[objective]:
+                    print(f'The {objective} needs to be deposited at the {deposit[objective]}')
+            print('You need to find a code to open the safe!!!')
         elif choice == 'Pick Up Items':
-            if location.available_actions()[0] == 'Pick up items':
-                p.pick_up_item(location)
+            if location.available_actions() and location.available_actions()[0] == 'Pick up items':
+                items_to_pick_up = [item for item in location.items if item not in p.inventory]
 
-                if p.found_all_items():  # Once you pick up an item, check if you have all required
-                    p.victory = True
+                for item in items_to_pick_up:
+                    p.pick_up_item(location, item)
+                    last_move = 'picked up ' + item.name
             else:
                 print('No items to pick up!!!')
         elif any(direction in choice for direction in location.available_directions):
             # Player entered correct direction, coordinates and location are changing
             if p.update(choice):
                 num_moves -= 1
+                last_move = choice
+        elif choice == 'Back':
+            num_moves += 1
+            item = ''
+            if last_move != '':
+                item = last_move.split()
+                item = item[len(item) - 1]
+
+            if 'picked up' in last_move:
+                p.drop_items(location, item, objectives)
+            elif 'dropped' in last_move:
+                p.pick_up_item(location, location.items[len(location.items) - 1])
+            elif 'Go' in last_move:
+                opposite_direction = {'Go East': 'Go West', 'Go West': 'Go East', 'Go North': 'Go South', 'Go South': 'Go North'}
+                p.update(opposite_direction[last_move])
+            else:
+                print('There is no previous move recorded to go back to!')
         elif choice in ['Go East', 'Go North', 'Go South', 'Go West']:  # Direction not allowed, prints LOCATION -1
             description = w.get_location(1, 0).long_description
             print(description)
@@ -105,23 +154,16 @@ if __name__ == "__main__":
             if choice in ['East', 'West', 'South', 'North']:
                 print('To move around, enter direction in the format: Go [direction]')
 
-        #  Possibilities:
-        #  A helper function such as do_action(w, p, location, choice)
-        #  OR A method in World class w.do_action(p, location, choice)
-        #  OR Check what type of action it is, then modify only player or location accordingly
-        #  OR Method in Player class for move or updating inventory
-        #  OR Method in Location class for updating location item info, or other location data etc....
+        if all(objectives[objective] is True for objective in objectives):
+            p.victory = True
 
-        """
-        Things I did / to do:
-        moved code above from player function
-        locations.available actions sent to player class
-        print items available at each location
-        for the enhancements a new class is needed -> PuzzleLocation (what it do?)
-        Once you pick up items, what do you do? Do you drop them off or win immediately?
-        """
+        print('')
 
-    if p.victory:
-        print('Congratulations! You found all items and got the to Exam Room on time for your exam.\\nYou won!!!')
-    else:  # Means the player wanted to quit the game
-        print('GAME OVER')
+    if p.victory and cracked_safe:
+        print('Congratulations! You found all items and cracked the safe!\nYou got to the Exam Room on time.')
+        print('You won the game!!!')
+    elif p.victory:
+        print('You found all items but could not open the safe\\nGAME OVER')
+    else:  # Means the player wanted to quit the game or no moves left
+        print('Ran out of moves!\nGAME OVER')
+        
