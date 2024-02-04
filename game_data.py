@@ -160,7 +160,11 @@ class PuzzleLocation(Location):
         self.puzzle_code = puzzle_code
 
      def solve_puzzle(self, attempts: int, max_attempts: int = 6) -> bool:
-        """Attempt to solve the puzzle in the given PuzzleLocation."""
+        """Attempt to solve the puzzle in the given PuzzleLocation.
+        Preconditions:
+        - attempts >= 0
+        - max_attempts > 0
+        """
         if attempts < max_attempts:
             passcode = input('Enter the three digit code for the safe.\nNote that the code only contains numbers: ')
 
@@ -214,6 +218,11 @@ class Player:
         self.victory = False
 
     def update(self, direction: str) -> bool:
+        """ Update the player's position based on the provided direction.
+
+        Preconditions:
+        - direction in ['Go East', 'Go West', 'Go North', 'Go South']
+        """
         map_width = 5
         map_length = 5
 
@@ -231,16 +240,18 @@ class Player:
         return True
 
     def found_all_items(self) -> bool:
-        # Check if the player has the required items for the exam
+        """ Check if the player has the required items for the exam.
+        Preconditions:
+        - All item names in self.inventory are unique.
+        """
         required_items = {'T_Card', 'Cheat_Sheet', 'Lucky_Pen', 'Backpack'}
         player_items = {item.name for item in self.inventory}
 
         return required_items == player_items
 
     def pick_up_item(self, location: Location, item: Item) -> None:
-        """
-        Pick up items available in the current location and add them to the player's inventory.
-        """
+        """ Pick up items available in the current location and add them to the player's inventory."""
+
         print(f"You pick up {item.name}.")
         self.score += 5
 
@@ -252,6 +263,7 @@ class Player:
         location.items = [i for i in location.items if i != item]
 
     def drop_items(self, location: Location, choice: str, objectives: dict[str, bool]) -> bool:
+        """ Drop the selected item from the player's inventory at the specified location."""
         index = self.find_item_index(self.inventory, choice)
 
         if index != -1:
@@ -300,8 +312,8 @@ class World:
         """
         Initialize a new World for a text adventure game, based on the data in the given open files.
 
-        - location_data: name of text file containing location data (format left up to you)
-        - items_data: name of text file containing item data (format left up to you)
+        - location_data: name of text file containing location data
+        - items_data: name of text file containing item data
         """
 
         # NOTES:
@@ -426,7 +438,7 @@ class World:
 
             for item in self.items:
                 if item.start_position == i + 1:
-                    new_ite.append(item)
+                    new_item.append(item)
 
             place = Location(positions[i], short_descriptions[i], long_description[i], directions[i], new_item)
             self.locations.append(place)
@@ -465,6 +477,9 @@ class World:
          that position. Otherwise, return None. (Remember, locations represented by the number -1 on the map should
          return None.)
 
+         Preconditions:
+        - len(self.locations) == len(self.map) * len(self.map[0])
+
         >>> world = World(open("map.txt"), open("locations.txt"), open("items.txt"))
         >>> 'LOCATION 1' in world.get_location(0, 0).long_description
         True
@@ -478,4 +493,3 @@ class World:
                 return self.locations[location_num - 1]
         else:
             return self.locations[9]
-         
