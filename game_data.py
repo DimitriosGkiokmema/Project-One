@@ -90,7 +90,7 @@ class Location:
     visited: bool
 
     def __init__(self, position: tuple[int, int], brief_description: str, long_description: str,
-                 available_directions: list[str], items: list[Item] = None) -> None:
+                 available_directions: list[str], items: list[Item]) -> None:
         """Initialize a new location.
 
         # TODO Add more details here about the initialization if needed
@@ -237,7 +237,7 @@ class Player:
 
         return required_items == player_items
 
-    def pick_up_item(self, location: Location) -> None:
+    def pick_up_item(self, location: Location, item: Item) -> None:
         """
         Pick up items available in the current location and add them to the player's inventory.
         """
